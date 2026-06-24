@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVL — Centro Veterinário de Santa Maria de Lamas</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500;1,6..72,600&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #071829;
+  --navy2:   #0D2438;
+  --blue:    #2587BF;
+  --blue-lt: #E6F3FA;
+  --mint:    #38A882;
+  --mint-dk: #2B8869;
+  --text:    #1A2E40;
+  --muted:   #637B8C;
+  --lt:      #F2F7FB;
+  --white:   #FFFFFF;
+  --fd: 'Newsreader', Georgia, serif;
+  --fb: 'Schibsted Grotesk', system-ui, sans-serif;
+  --ease: cubic-bezier(.25,.46,.45,.94);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);color:var(--text);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:72px;padding:0 3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s var(--ease), box-shadow .4s var(--ease);
+}
+.nav.on{
+  background:rgba(7,24,41,.95);
+  backdrop-filter:blur(20px) saturate(1.4);
+  box-shadow:0 1px 0 rgba(255,255,255,.05),0 8px 32px rgba(0,0,0,.32);
+}
+.nav__logo img{height:48px;width:auto;border-radius:10px}
+.nav__links{display:flex;gap:2.25rem}
+.nav__links a{
+  color:rgba(255,255,255,.72);font-size:.85rem;font-weight:500;
+  letter-spacing:.025em;transition:color .2s;
+}
+.nav__links a:hover{color:#fff}
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-family:var(--fb);font-weight:600;font-size:.85rem;
+  border:none;cursor:pointer;border-radius:7px;transition:all .22s var(--ease);
+  white-space:nowrap;line-height:1;
+}
+.btn-g{background:var(--mint);color:#fff;padding:.7rem 1.45rem}
+.btn-g:hover{background:var(--mint-dk);transform:translateY(-1px);box-shadow:0 8px 24px rgba(56,168,130,.38)}
+.btn-o{border:1.5px solid rgba(255,255,255,.28);color:#fff;padding:.68rem 1.45rem}
+.btn-o:hover{border-color:rgba(255,255,255,.72);background:rgba(255,255,255,.06)}
+.nav__burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav__burger span{display:block;width:22px;height:1.5px;background:#fff;border-radius:1px}
+
+/* ── MOBILE NAV ── */
+.mnav{
+  display:none;position:fixed;inset:0;background:var(--navy);
+  z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
+}
+.mnav.open{display:flex}
+.mnav a{color:#fff;font-size:1.5rem;font-weight:600;letter-spacing:-.01em}
+.mnav .btn-g{font-size:1rem;padding:.9rem 2rem}
+.mx{position:absolute;top:1.4rem;right:1.5rem;color:#fff;font-size:1.2rem;cursor:pointer;background:none;border:none;font-family:var(--fb)}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero__bg{position:absolute;inset:0}
+.hero__bg img{width:100%;height:100%;object-fit:cover;object-position:72% center}
+.hero__bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(108deg,
+    rgba(7,24,41,.98) 0%,
+    rgba(7,24,41,.93) 38%,
+    rgba(7,24,41,.52) 62%,
+    rgba(7,24,41,.12) 100%
+  );
+}
+.hero__body{position:relative;z-index:1;padding:8rem 4rem 5rem;max-width:660px}
+.hero__tag{
+  display:inline-flex;align-items:center;gap:.65rem;
+  font-size:.68rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mint);margin-bottom:1.75rem;
+}
+.hero__tag::before{content:'';display:block;width:30px;height:1.5px;background:var(--mint)}
+.hero__h1{
+  font-family:var(--fd);
+  font-size:clamp(3.2rem,6vw,5.5rem);
+  color:#fff;line-height:1.06;letter-spacing:-.01em;
+  margin-bottom:1.4rem;
+}
+.hero__h1 em{font-style:italic;color:rgba(255,255,255,.55)}
+.hero__sub{
+  color:rgba(255,255,255,.52);font-size:1.05rem;
+  line-height:1.78;max-width:400px;margin-bottom:2.75rem;
+}
+.hero__ctas{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem}
+.hero__tel{
+  display:flex;align-items:center;gap:.75rem;
+  color:rgba(255,255,255,.38);font-size:.78rem;
+}
+.hero__tel svg{color:var(--mint);flex-shrink:0}
+.hero__tel strong{color:rgba(255,255,255,.78)}
+
+/* ── SCROLL DOT ── */
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:1;
+  opacity:.5;
+}
+.scroll-hint span{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:#fff}
+.scroll-dot{width:1px;height:48px;background:linear-gradient(to bottom,rgba(255,255,255,.4),transparent)}
+
+/* ── EYEBROW (shared) ── */
+.ey{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:.67rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--blue);margin-bottom:.6rem;
+}
+.ey::before{content:'';display:inline-block;width:22px;height:1.5px;background:currentColor}
+.ey-m{color:var(--mint)}
+
+/* ── SECTIONS ── */
+.sec{padding:6rem 2rem}
+.sec-alt{background:var(--lt)}
+.sec-dark{background:var(--navy)}
+.wrap{max-width:1140px;margin:0 auto}
+.sh{
+  font-family:var(--fd);
+  font-size:clamp(1.85rem,3.5vw,2.85rem);
+  line-height:1.15;margin-bottom:.85rem;color:var(--navy);
+}
+.sec-dark .sh{color:#fff}
+.sp{color:var(--muted);font-size:.975rem;line-height:1.8;max-width:520px;margin-bottom:3rem}
+
+/* ── SERVICES (seamless grid) ── */
+.svc-wrap{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+}
+.svc{
+  background:#fff;border:1px solid rgba(37,135,191,.12);border-radius:14px;
+  padding:2.25rem 2rem;position:relative;overflow:hidden;cursor:default;
+  transition:border-color .22s, box-shadow .22s var(--ease);
+}
+.svc::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;
+  background:linear-gradient(90deg,var(--mint),var(--blue));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .3s var(--ease);
+}
+.svc:hover{border-color:rgba(37,135,191,.3);box-shadow:0 8px 28px rgba(7,24,41,.07)}
+.svc:hover::after{transform:scaleX(1)}
+.svc-num{
+  font-family:var(--fd);font-size:1.6rem;font-weight:600;
+  color:rgba(37,135,191,.28);margin-bottom:1.15rem;line-height:1;
+}
+.svc-n{font-size:.975rem;font-weight:600;color:var(--navy);margin-bottom:.4rem}
+.svc-d{font-size:.825rem;color:var(--muted);line-height:1.6}
+
+/* ── SERVICES TOGGLE ── */
+.svc-toggle{display:flex;justify-content:center;margin-top:2.5rem}
+.svc-toggle button{
+  background:none;border:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--fb);font-weight:600;font-size:.85rem;color:var(--blue);
+  transition:gap .2s;
+}
+.svc-toggle button:hover{gap:.75rem}
+.svc-toggle svg{transition:transform .25s var(--ease)}
+.svc-toggle button.open svg{transform:rotate(180deg)}
+.svc-extra{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .35s var(--ease), opacity .3s var(--ease), margin-top .35s var(--ease);
+}
+.svc-extra.open{max-height:400px;opacity:1;margin-top:2rem}
+.svc-extra-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;
+  padding-top:2rem;border-top:1px solid rgba(37,135,191,.14);
+}
+.svc-x-n{font-size:.875rem;font-weight:600;color:var(--navy);margin-bottom:.3rem}
+.svc-x-d{font-size:.775rem;color:var(--muted);line-height:1.55}
+
+/* ── PHILOSOPHY ── */
+.phil{
+  background:var(--navy);text-align:center;
+  padding:5rem 2rem;position:relative;overflow:hidden;
+}
+.phil::before,.phil::after{
+  content:'"';position:absolute;
+  font-family:var(--fd);font-size:22rem;color:rgba(255,255,255,.022);
+  line-height:1;pointer-events:none;user-select:none;
+}
+.phil::before{top:-4rem;left:-1rem}
+.phil::after{bottom:-8rem;right:-1rem}
+.phil blockquote{
+  font-family:var(--fd);font-style:italic;
+  font-size:clamp(1.5rem,3.5vw,2.75rem);
+  color:rgba(255,255,255,.92);max-width:820px;
+  margin:0 auto;position:relative;z-index:1;line-height:1.3;
+}
+.phil cite{
+  display:block;margin-top:1.1rem;
+  font-size:.67rem;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--mint);font-style:normal;
+}
+
+/* ── SPECIES ── */
+.sp-grid{display:grid;grid-template-columns:1fr 1fr}
+.sp-panel{
+  position:relative;min-height:540px;
+  overflow:hidden;padding:5rem 4rem;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.sp-bg{position:absolute;inset:0}
+.sp-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.03);transition:transform 8s var(--ease)}
+.sp-panel:hover .sp-bg img{transform:scale(1)}
+.sp-panel--dog .sp-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(155deg,rgba(80,35,8,.9) 0%,rgba(80,35,8,.72) 55%,rgba(80,35,8,.45) 100%);
+}
+.sp-panel--cat .sp-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(155deg,rgba(5,30,62,.9) 0%,rgba(5,30,62,.72) 55%,rgba(5,30,62,.45) 100%);
+}
+.sp-body{position:relative;z-index:1}
+.sp-badge{
+  display:inline-block;padding:.25rem .85rem;border-radius:100px;
+  font-size:.67rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:1rem;
+}
+.sp-panel--dog .sp-badge{background:rgba(255,195,90,.15);color:#FFD080;border:1px solid rgba(255,195,90,.3)}
+.sp-panel--cat .sp-badge{background:rgba(110,175,255,.15);color:#8EC8FF;border:1px solid rgba(110,175,255,.3)}
+.sp-h{
+  font-family:var(--fd);font-size:2.6rem;
+  color:#fff;line-height:1.1;margin-bottom:1.35rem;
+}
+.sp-ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.sp-ul li{
+  display:flex;gap:.65rem;
+  font-size:.87rem;color:rgba(255,255,255,.78);line-height:1.5;
+}
+.sp-ul li::before{content:'→';color:rgba(255,255,255,.35);flex-shrink:0;font-size:.8rem;margin-top:2px}
+
+/* ── CONVENIENCE ── */
+.cv-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.cv-card{
+  border-radius:16px;overflow:hidden;
+  position:relative;min-height:360px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.cv-bg{position:absolute;inset:0}
+.cv-bg img{width:100%;height:100%;object-fit:cover;transition:transform 6s var(--ease)}
+.cv-card:hover .cv-bg img{transform:scale(1.04)}
+.cv-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,24,41,.96) 0%,rgba(7,24,41,.6) 50%,rgba(7,24,41,.08) 100%);
+}
+.cv-body{position:relative;z-index:1;padding:2.25rem}
+.cv-tag{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mint);margin-bottom:.45rem}
+.cv-h{font-family:var(--fd);font-size:2.1rem;color:#fff;line-height:1.15;margin-bottom:.75rem}
+.cv-p{font-size:.84rem;color:rgba(255,255,255,.58);line-height:1.68;margin-bottom:1.25rem}
+.cv-lk{
+  display:inline-flex;align-items:center;gap:.42rem;
+  color:var(--mint);font-weight:600;font-size:.84rem;
+  transition:gap .2s;
+}
+.cv-lk:hover{gap:.72rem}
+
+/* ── ABOUT ── */
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.ab-text p{color:rgba(255,255,255,.56);font-size:.96rem;line-height:1.85;margin-bottom:.9rem}
+.ab-stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.stat{padding:0 0 0 1.4rem;border-left:2px solid rgba(56,168,130,.5)}
+.stat-n{
+  font-family:var(--fd);font-size:3rem;
+  color:var(--mint);line-height:1;margin-bottom:.4rem;
+}
+.stat-l{font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* ── CONTACT ── */
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.ct-items{display:flex;flex-direction:column;gap:1.75rem}
+.ct-row{display:flex;gap:1.1rem;align-items:flex-start}
+.ct-ico{
+  width:42px;height:42px;border-radius:9px;
+  background:var(--blue-lt);display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;
+}
+.ct-ico svg{width:18px;height:18px;color:var(--blue)}
+.ct-lbl{font-size:.66rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.22rem}
+.ct-val{font-size:.925rem;font-weight:500;color:var(--text)}
+.ct-sub{font-size:.775rem;color:var(--muted);margin-top:.12rem}
+.hrs{background:var(--lt);border-radius:12px;padding:1.5rem}
+.hrs-r{display:flex;justify-content:space-between;padding:.48rem 0;border-bottom:1px solid rgba(37,135,191,.08);font-size:.85rem}
+.hrs-r:last-child{border:none}
+.hrs-r span:first-child{color:var(--muted)}
+.hrs-r span:last-child{font-weight:600;color:var(--navy)}
+.map-w{border-radius:14px;overflow:hidden;height:380px;box-shadow:0 8px 40px rgba(7,24,41,.14)}
+.map-w iframe{width:100%;height:100%;border:none}
+
+/* ── BOOKING ── */
+.bk-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:4.5rem;align-items:start}
+.bk-intro .sp{margin-bottom:2rem}
+.bk-list{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.bk-list li{display:flex;gap:.75rem;align-items:flex-start;font-size:.875rem;color:var(--text);line-height:1.5}
+.bk-list svg{width:20px;height:20px;color:var(--mint);flex-shrink:0;margin-top:1px}
+.bk-form{background:#fff;border:1px solid rgba(37,135,191,.14);border-radius:16px;padding:2.25rem;box-shadow:0 8px 40px rgba(7,24,41,.06)}
+.bk-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.bk-field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.1rem}
+.bk-field label{font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--navy)}
+.bk-field label span{color:var(--mint)}
+.bk-field input,.bk-field select,.bk-field textarea{
+  font-family:var(--fb);font-size:.9rem;color:var(--text);
+  background:var(--lt);border:1.5px solid transparent;border-radius:9px;
+  padding:.7rem .85rem;width:100%;transition:border-color .2s,background .2s;
+}
+.bk-field textarea{resize:vertical;min-height:84px}
+.bk-field input:focus,.bk-field select:focus,.bk-field textarea:focus{outline:none;border-color:var(--mint);background:#fff}
+.bk-form .btn-g{width:100%;justify-content:center;padding:.9rem;font-size:.92rem;margin-top:.5rem}
+.bk-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.9rem;line-height:1.5}
+.bk-ok{display:none;flex-direction:column;align-items:center;text-align:center;padding:2.5rem 1rem;gap:.85rem}
+.bk-ok.show{display:flex}
+.bk-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(56,168,130,.12);display:flex;align-items:center;justify-content:center}
+.bk-ok-ic svg{width:28px;height:28px;color:var(--mint)}
+.bk-ok h3{font-family:var(--fd);font-size:1.5rem;color:var(--navy)}
+.bk-ok p{font-size:.875rem;color:var(--muted);line-height:1.6;max-width:320px}
+
+/* ── FOOTER ── */
+.ft{
+  background:#040C17;color:rgba(255,255,255,.3);
+  padding:2.25rem;text-align:center;font-size:.77rem;
+}
+.ft strong{color:rgba(255,255,255,.65)}
+.ft a{color:var(--blue)}
+
+/* ── REVEAL ── */
+.r{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.on{opacity:1;transform:none}
+.r2{transition-delay:.1s}
+.r3{transition-delay:.18s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:920px){
+  .nav{padding:0 1.25rem}
+  .nav__links,.nav .btn-g{display:none}
+  .nav__burger{display:flex}
+  .hero__body{padding:6.5rem 1.5rem 4rem;max-width:100%}
+  .svc-wrap{grid-template-columns:1fr 1fr}
+  .svc-extra-grid{grid-template-columns:1fr 1fr}
+  .sp-grid{grid-template-columns:1fr}
+  .sp-panel{min-height:400px;padding:3rem 2rem}
+  .cv-grid{grid-template-columns:1fr}
+  .ab-grid{grid-template-columns:1fr;gap:3.5rem}
+  .ct-grid{grid-template-columns:1fr}
+  .bk-grid{grid-template-columns:1fr;gap:3rem}
+  .bk-row{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .sec{padding:4.5rem 1.25rem}
+  .svc-wrap{grid-template-columns:1fr}
+  .svc-extra-grid{grid-template-columns:1fr}
+  .ab-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav__logo">
+    <img src="data:image/jpeg;base64,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" alt="CVL – Centro Veterinário de Santa Maria de Lamas">
+  </a>
+  <div class="nav__links">
+    <a href="#servicos">Serviços</a>
+    <a href="#cuidados">Cuidados</a>
+    <a href="#sobre">Quem somos</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <a href="#marcar" class="btn btn-g">Marcar consulta</a>
+  <div class="nav__burger" id="burger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mnav" id="mnav">
+  <button class="mx" id="mx">✕</button>
+  <a href="#servicos" onclick="cm()">Serviços</a>
+  <a href="#cuidados" onclick="cm()">Cuidados</a>
+  <a href="#sobre"    onclick="cm()">Quem somos</a>
+  <a href="#contacto" onclick="cm()">Contacto</a>
+  <a href="#marcar" class="btn btn-g" onclick="cm()">Marcar consulta →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__bg">
+    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=1600&q=85" alt="">
+  </div>
+  <div class="hero__body">
+    <div class="hero__tag">Santa Maria de Lamas · Desde 2015</div>
+    <h1 class="hero__h1">
+      Cuidados<br>
+      especializados,<br>
+      <em>carinhos</em><br>
+      a dobrar.
+    </h1>
+    <p class="hero__sub">
+      Medicina veterinária de excelência com atendimento personalizado — para cães, gatos e os seus tutores.
+    </p>
+    <div class="hero__ctas">
+      <a href="#marcar" class="btn btn-g">Marcar consulta →</a>
+      <a href="#servicos" class="btn btn-o">Ver serviços</a>
+    </div>
+    <div class="hero__tel">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/></svg>
+      <span><strong>966 450 605</strong> · <strong>968 725 360</strong> &nbsp;·&nbsp; chamada rede móvel nacional</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-dot"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="sec sec-alt" id="servicos">
+  <div class="wrap">
+    <div class="r">
+      <div class="ey">O que fazemos</div>
+      <h2 class="sh">Os nossos serviços</h2>
+      <p class="sp">Uma gama completa de cuidados médico-veterinários e de bem-estar — modernos, inovadores e de qualidade.</p>
+    </div>
+    <div class="svc-wrap r r2">
+      <div class="svc"><div class="svc-num">01</div><div class="svc-n">Medicina Preventiva</div><div class="svc-d">Vacinas, rastreios e planos de saúde anuais</div></div>
+      <div class="svc"><div class="svc-num">02</div><div class="svc-n">Consultas</div><div class="svc-d">Gerais, de especialidade, pediátricas e sénior</div></div>
+      <div class="svc"><div class="svc-num">03</div><div class="svc-n">Cirurgia</div><div class="svc-d">Geral e de especialidade com anestesia volátil monitorizada</div></div>
+      <div class="svc"><div class="svc-num">04</div><div class="svc-n">Banhos e Tosquias</div><div class="svc-d">Estética canina e felina especializada</div></div>
+      <div class="svc"><div class="svc-num">05</div><div class="svc-n">Exames de Diagnóstico</div><div class="svc-d">Análises, ecografias e exames complementares</div></div>
+      <div class="svc"><div class="svc-num">06</div><div class="svc-n">Desparasitação</div><div class="svc-d">Interna e externa com protocolo espécie-específico</div></div>
+    </div>
+    <div class="svc-toggle">
+      <button id="svcToggleBtn" onclick="toggleSvc()">
+        <span id="svcToggleLabel">Ver todos os serviços</span>
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+    </div>
+    <div class="svc-extra" id="svcExtra">
+      <div class="svc-extra-grid">
+        <div><div class="svc-x-n">Aconselhamento Nutricional</div><div class="svc-x-d">Dietas e entrega de ração ao domicílio</div></div>
+        <div><div class="svc-x-n">Medicinas Alternativas</div><div class="svc-x-d">Tratamentos complementares disponíveis</div></div>
+        <div><div class="svc-x-n">Serviço Fúnebre</div><div class="svc-x-d">Apoio e acompanhamento nos momentos difíceis</div></div>
+        <div><div class="svc-x-n" style="color:var(--mint-dk)">Marcação Online</div><div class="svc-x-d">Agende a consulta em qualquer hora, sem esperas</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="cuidados">
+  <div class="phil">
+    <blockquote>"Um gato não é um cão pequeno"</blockquote>
+    <cite>CVL — Filosofia de cuidado diferenciado por espécie</cite>
+  </div>
+
+  <!-- SPECIES -->
+  <div class="sp-grid">
+    <div class="sp-panel sp-panel--dog">
+      <div class="sp-bg">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=75" alt="">
+      </div>
+      <div class="sp-body r">
+        <span class="sp-badge">🐕 Cão</span>
+        <h3 class="sp-h">Cuidados<br>caninos</h3>
+        <ul class="sp-ul">
+          <li>Consultas pediátricas e sénior, adaptadas a cada raça e porte</li>
+          <li>Protocolos de desparasitação interna e externa ajustados ao estilo de vida</li>
+          <li>Planos de vacinação obrigatórios e opcionais</li>
+          <li>Tosquias e banhos por especialistas em estética canina</li>
+          <li>Esterilização com monitorização contínua e controlo da dor</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sp-panel sp-panel--cat">
+      <div class="sp-bg">
+        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=75" alt="">
+      </div>
+      <div class="sp-body r">
+        <span class="sp-badge">🐈 Gato</span>
+        <h3 class="sp-h">Medicina<br>felina</h3>
+        <ul class="sp-ul">
+          <li>Abordagem comportamental exclusiva — o gato tem necessidades únicas</li>
+          <li>Maneio do stress felino em consulta e nos procedimentos</li>
+          <li>Vacinação e desparasitação adaptadas ao ambiente (indoor/outdoor)</li>
+          <li>Esterilização com analgesia pré e pós-operatória de última geração</li>
+          <li>Rastreio e deteção precoce de doenças crónicas felinas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONVENIENCE -->
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="r">
+      <div class="ey">Para a sua comodidade</div>
+      <h2 class="sh">Medicina veterinária<br>ao seu ritmo</h2>
+    </div>
+    <div class="cv-grid r r2">
+      <div class="cv-card">
+        <div class="cv-bg"><img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80" alt="Drop n'Go"></div>
+        <div class="cv-body">
+          <div class="cv-tag">Serviço exclusivo</div>
+          <div class="cv-h">Drop n'Go</div>
+          <p class="cv-p">Deixe o seu animal connosco de manhã e recolha-o à tarde. Ideal para vacinações, banhos, cirurgias e tratamentos continuados — sem ter de esperar.</p>
+          <a href="#marcar" class="cv-lk">Agendar agora →</a>
+        </div>
+      </div>
+      <div class="cv-card">
+        <div class="cv-bg"><img src="https://images.unsplash.com/photo-1551884831-bbf3cdc6469e?auto=format&fit=crop&w=800&q=80" alt="Domicílios"></div>
+        <div class="cv-body">
+          <div class="cv-tag">Consultas em casa</div>
+          <div class="cv-h">Domicílios</div>
+          <p class="cv-p">Deslocamo-nos a sua casa para cuidados veterinários especializados. Especialmente indicado para animais jovens, idosos ou com stress no transporte.</p>
+          <a href="#contacto" class="cv-lk">Saber mais →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec sec-dark" id="sobre">
+  <div class="wrap">
+    <div class="ab-grid">
+      <div class="ab-text r">
+        <div class="ey ey-m">Quem somos</div>
+        <h2 class="sh">Centro Veterinário de<br>Santa Maria de Lamas</h2>
+        <p>No CVL proporcionamos ao seu animal um tratamento médico-veterinário de excelência e um atendimento verdadeiramente personalizado, adequado a cada cliente e a cada paciente.</p>
+        <p>Todos os serviços são efetuados por marcação — evitando filas de espera e otimizando o tempo de cada visita. Cada animal merece ser tratado pelas suas características individuais.</p>
+        <p>Queremos acompanhá-lo nos bons momentos e ajudá-lo a ultrapassar os mais difíceis, com conhecimentos especializados e experiência técnica comprovada.</p>
+        <a href="#contacto" class="btn btn-g" style="margin-top:1.75rem;width:fit-content">Visite-nos →</a>
+      </div>
+      <div class="ab-stats r r2">
+        <div class="stat"><div class="stat-n">2015</div><div class="stat-l">Ano de fundação, ao serviço da comunidade</div></div>
+        <div class="stat"><div class="stat-n">11</div><div class="stat-l">Anos de experiência clínica dedicada</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Serviços por marcação, sem filas de espera</div></div>
+        <div class="stat"><div class="stat-n">+1500</div><div class="stat-l">Animais acompanhados ao longo dos anos</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<!-- ⚠ Para o formulário funcionar: cria uma conta grátis em formspree.io, gera um Form ID e substitui YOUR_FORM_ID abaixo. -->
+<section class="sec" id="marcar">
+  <div class="wrap">
+    <div class="bk-grid">
+      <div class="bk-intro r">
+        <div class="ey ey-m">Marcação</div>
+        <h2 class="sh">Marque a consulta<br>do seu animal</h2>
+        <p class="sp">Preencha o formulário e entramos em contacto para confirmar a data e a hora. Todos os atendimentos são por marcação — para que o seu animal seja recebido sem filas de espera.</p>
+        <ul class="bk-list">
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Resposta no próprio dia útil</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Atendimento personalizado por paciente</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Prefere falar? Ligue <strong>966 450 605</strong></li>
+        </ul>
+      </div>
+      <div class="bk-form r r2">
+        <form id="bkForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div id="bkFields">
+            <div class="bk-row">
+              <div class="bk-field"><label for="bkNome">Nome <span>*</span></label><input id="bkNome" name="nome" type="text" required placeholder="O seu nome"></div>
+              <div class="bk-field"><label for="bkTel">Telefone <span>*</span></label><input id="bkTel" name="telefone" type="tel" required placeholder="9XX XXX XXX"></div>
+            </div>
+            <div class="bk-field"><label for="bkEmail">Email</label><input id="bkEmail" name="email" type="email" placeholder="email@exemplo.pt"></div>
+            <div class="bk-row">
+              <div class="bk-field"><label for="bkAnimal">Animal <span>*</span></label><select id="bkAnimal" name="animal" required><option value="" disabled selected>Selecione</option><option>Cão</option><option>Gato</option><option>Outro</option></select></div>
+              <div class="bk-field"><label for="bkData">Data preferida</label><input id="bkData" name="data_preferida" type="date"></div>
+            </div>
+            <div class="bk-field"><label for="bkServico">Serviço <span>*</span></label><select id="bkServico" name="servico" required><option value="" disabled selected>Selecione um serviço</option><option>Medicina Preventiva</option><option>Consulta</option><option>Cirurgia</option><option>Banhos e Tosquias</option><option>Exames de Diagnóstico</option><option>Desparasitação</option><option>Aconselhamento Nutricional</option><option>Drop n'Go</option><option>Domicílio</option><option>Outro</option></select></div>
+            <div class="bk-field"><label for="bkMsg">Mensagem</label><textarea id="bkMsg" name="mensagem" placeholder="Conte-nos o que precisa (opcional)"></textarea></div>
+            <button type="submit" class="btn btn-g">Pedir marcação →</button>
+            <p class="bk-note">Ao enviar, será contactado para confirmar a disponibilidade.</p>
+          </div>
+          <div class="bk-ok" id="bkOk">
+            <div class="bk-ok-ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+            <h3>Pedido enviado!</h3>
+            <p>Recebemos o seu pedido de marcação. Entramos em contacto em breve para confirmar a data e a hora.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contacto">
+  <div class="wrap">
+    <div class="r">
+      <div class="ey">Visite-nos</div>
+      <h2 class="sh">Estamos aqui para si</h2>
+    </div>
+    <div class="ct-grid r r2">
+      <div class="ct-items">
+        <div class="ct-row">
+          <div class="ct-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+          <div>
+            <div class="ct-lbl">Morada</div>
+            <div class="ct-val">Rua de Santa Maria, 1702, Bloco 2, Edifício 2, R/C Direito</div>
+            <div class="ct-sub">4535-400 Santa Maria de Lamas</div>
+          </div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/></svg></div>
+          <div>
+            <div class="ct-lbl">Telefone</div>
+            <div class="ct-val">966 450 605 · 968 725 360</div>
+            <div class="ct-sub">Chamada rede móvel nacional</div>
+          </div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <div>
+            <div class="ct-lbl">Email</div>
+            <div class="ct-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="41223732202f35202c2033282025242d202c203201262c20282d6f222e2c">[email&#160;protected]</a></div>
+          </div>
+        </div>
+        <div class="hrs">
+          <div class="ey" style="margin-bottom:.75rem">Horário</div>
+          <div class="hrs-r"><span>Segunda a Sexta</span><span>10:00–12:30 · 14:30–19:00</span></div>
+          <div class="hrs-r"><span>Sábado</span><span>10:00–13:00</span></div>
+          <div class="hrs-r"><span>Domingo</span><span>Encerrado</span></div>
+        </div>
+        <a href="tel:+351966450605" class="btn btn-g" style="width:fit-content">📞 Ligar agora</a>
+      </div>
+      <div>
+        <div class="map-w">
+          <iframe src="https://maps.google.com/maps?q=40.9803769,-8.5712843&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <p><strong>CVL — Centro Veterinário de Santa Maria de Lamas</strong> · Rua de Santa Maria, 1702 · 4535-400 Santa Maria de Lamas</p>
+  <p style="margin-top:.5rem">© 2015 Centro Veterinário de Santa Maria de Lamas · <a href="#">Política de Privacidade</a> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b382d283a352f3a363a29323a3f3e373a363a281b3c363a323775383436">[email&#160;protected]</a></p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>50));
+
+const burger=document.getElementById('burger');
+const mnav=document.getElementById('mnav');
+const mx=document.getElementById('mx');
+burger.addEventListener('click',()=>mnav.classList.add('open'));
+mx.addEventListener('click',()=>mnav.classList.remove('open'));
+function cm(){mnav.classList.remove('open')}
+
+function toggleSvc(){
+  const extra=document.getElementById('svcExtra');
+  const btn=document.getElementById('svcToggleBtn');
+  const label=document.getElementById('svcToggleLabel');
+  const isOpen=extra.classList.toggle('open');
+  btn.classList.toggle('open',isOpen);
+  label.textContent=isOpen?'Ver menos':'Ver todos os serviços';
+}
+
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('on'),i*75);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+const bkForm=document.getElementById('bkForm');
+if(bkForm){
+  bkForm.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const btn=bkForm.querySelector('button[type=submit]');
+    const orig=btn.textContent;
+    btn.textContent='A enviar…';btn.disabled=true;
+    try{
+      const res=await fetch(bkForm.action,{method:'POST',body:new FormData(bkForm),headers:{Accept:'application/json'}});
+      if(!res.ok) throw new Error();
+      document.getElementById('bkFields').style.display='none';
+      document.getElementById('bkOk').classList.add('show');
+    }catch(err){
+      btn.textContent=orig;btn.disabled=false;
+      alert('Não foi possível enviar o pedido. Por favor ligue 966 450 605.');
+    }
+  });
+}
+</script>
+</body>
+</html>
