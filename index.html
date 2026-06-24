@@ -559,7 +559,9 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- BOOKING -->
-<!-- ⚠ Para o formulário funcionar: cria uma conta grátis em formspree.io, gera um Form ID e substitui YOUR_FORM_ID abaixo. -->
+<!-- Formulário ligado ao FormSubmit — envia para zulgang05@gmail.com (TEMPORÁRIO, para demo). -->
+<!-- ENTREGA À CLÍNICA: trocar abaixo zulgang05@gmail.com por cvsantamariadelamas@gmail.com e a clínica faz a ativação uma vez. -->
+<!-- ATIVAÇÃO (1ª vez apenas): faz um envio de teste → chega um email do FormSubmit → clica em "Activate Form". A partir daí funciona para sempre. -->
 <section class="sec" id="marcar">
   <div class="wrap">
     <div class="bk-grid">
@@ -574,7 +576,11 @@ a{color:inherit;text-decoration:none}
         </ul>
       </div>
       <div class="bk-form r r2">
-        <form id="bkForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form id="bkForm" action="https://formsubmit.co/ajax/zulgang05@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Novo pedido de marcação — site CVL">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
           <div id="bkFields">
             <div class="bk-row">
               <div class="bk-field"><label for="bkNome">Nome <span>*</span></label><input id="bkNome" name="nome" type="text" required placeholder="O seu nome"></div>
@@ -630,7 +636,7 @@ a{color:inherit;text-decoration:none}
           <div class="ct-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
           <div>
             <div class="ct-lbl">Email</div>
-            <div class="ct-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="41223732202f35202c2033282025242d202c203201262c20282d6f222e2c">[email&#160;protected]</a></div>
+            <div class="ct-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="67041114060913060a06150e0603020b060a061427000a060e0b4904080a">[email&#160;protected]</a></div>
           </div>
         </div>
         <div class="hrs">
@@ -653,7 +659,7 @@ a{color:inherit;text-decoration:none}
 <!-- FOOTER -->
 <footer class="ft">
   <p><strong>CVL — Centro Veterinário de Santa Maria de Lamas</strong> · Rua de Santa Maria, 1702 · 4535-400 Santa Maria de Lamas</p>
-  <p style="margin-top:.5rem">© 2015 Centro Veterinário de Santa Maria de Lamas · <a href="#">Política de Privacidade</a> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b382d283a352f3a363a29323a3f3e373a363a281b3c363a323775383436">[email&#160;protected]</a></p>
+  <p style="margin-top:.5rem">© 2015 Centro Veterinário de Santa Maria de Lamas · <a href="#">Política de Privacidade</a> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5b6a3a6b4bba1b4b8b4a7bcb4b1b0b9b4b8b4a695b2b8b4bcb9fbb6bab8">[email&#160;protected]</a></p>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
